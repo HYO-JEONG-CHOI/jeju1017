@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>제주 여행</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
         * {
             margin: 0;
@@ -188,118 +190,130 @@
             background: #FDDC00;
         }
 
-        /* 필터 버튼 */
-        .filter-container {
+        /* 지도 */
+        #map {
+            width: 100%;
+            height: calc(100vh - 180px);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .map-filter-container {
             display: flex;
             gap: 8px;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
         }
 
-        .filter-btn {
-            padding: 10px 20px;
-            border: 1px solid #ddd;
+        .map-filter-btn {
+            padding: 8px 16px;
+            border: 2px solid #ddd;
             background: white;
             border-radius: 20px;
-            font-size: 0.95em;
+            font-size: 0.9em;
             cursor: pointer;
             white-space: nowrap;
             transition: all 0.2s;
         }
 
-        .filter-btn.active {
-            background: #333;
+        .map-filter-btn.active {
+            font-weight: bold;
+        }
+
+        .map-filter-btn.restaurant {
+            border-color: #FF6B6B;
+            color: #FF6B6B;
+        }
+
+        .map-filter-btn.restaurant.active {
+            background: #FF6B6B;
             color: white;
-            border-color: #333;
         }
 
-        /* 장소 카드 */
-        .place-card {
-            background: white;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            overflow: hidden;
+        .map-filter-btn.bar {
+            border-color: #FFA500;
+            color: #FFA500;
         }
 
-        .place-image {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            background: #e0e0e0;
+        .map-filter-btn.bar.active {
+            background: #FFA500;
+            color: white;
         }
 
-        .place-content {
-            padding: 16px;
+        .map-filter-btn.cafe {
+            border-color: #4CAF50;
+            color: #4CAF50;
         }
 
-        .place-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
+        .map-filter-btn.cafe.active {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .popup-content {
+            min-width: 200px;
+        }
+
+        .popup-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 4px;
+        }
+
+        .popup-category {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8em;
             margin-bottom: 8px;
         }
 
-        .place-name {
-            font-weight: bold;
-            font-size: 1.1em;
-            flex: 1;
+        .popup-category.restaurant {
+            background: #FFE5E5;
+            color: #FF6B6B;
         }
 
-        .place-category {
-            background: #f0f0f0;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 0.85em;
-            color: #666;
+        .popup-category.bar {
+            background: #FFF4E5;
+            color: #FFA500;
         }
 
-        .place-memo {
+        .popup-category.cafe {
+            background: #E8F5E9;
+            color: #4CAF50;
+        }
+
+        .popup-memo {
             color: #666;
             font-size: 0.9em;
+            margin-bottom: 8px;
             line-height: 1.4;
-            margin-bottom: 12px;
         }
 
-        .place-actions {
+        .popup-buttons {
             display: flex;
-            gap: 8px;
+            gap: 4px;
         }
 
-        .map-btn {
+        .popup-btn {
             flex: 1;
-            padding: 12px;
-            background: #03C75A;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.95em;
-            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 0.85em;
             text-decoration: none;
-            display: block;
             text-align: center;
+            display: block;
         }
 
-        .map-btn:active {
-            background: #02b350;
+        .popup-btn.tmap {
+            background: #0052A3;
+            color: white;
         }
 
-        .check-btn {
-            width: 48px;
-            padding: 12px;
-            background: #f0f0f0;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.2em;
-            cursor: pointer;
-        }
-
-        .check-btn.checked {
-            background: #333;
-        }
-
-        .place-card.visited {
-            opacity: 0.6;
+        .popup-btn.kakao {
+            background: #FEE500;
+            color: #000;
         }
 
         /* 하단 탭 */
@@ -311,7 +325,7 @@
             background: white;
             border-top: 1px solid #e0e0e0;
             display: flex;
-            z-index: 100;
+            z-index: 1000;
         }
 
         .tab-btn {
@@ -452,19 +466,18 @@
         </div>
     </div>
 
-    <!-- 장소 리스트 탭 -->
+    <!-- 장소 지도 탭 -->
     <div id="tab-places" class="tab-content">
         <div class="content">
-            <div class="section-title">📍 장소 리스트</div>
+            <div class="section-title">📍 장소 지도</div>
 
-            <div class="filter-container">
-                <button class="filter-btn active" onclick="filterPlaces('all')">전체</button>
-                <button class="filter-btn" onclick="filterPlaces('cafe')">카페</button>
-                <button class="filter-btn" onclick="filterPlaces('restaurant')">음식점</button>
-                <button class="filter-btn" onclick="filterPlaces('bar')">술집</button>
+            <div class="map-filter-container">
+                <button class="map-filter-btn restaurant active" onclick="toggleCategory('restaurant')">🍖 흑돼지</button>
+                <button class="map-filter-btn bar active" onclick="toggleCategory('bar')">🍺 술집</button>
+                <button class="map-filter-btn cafe active" onclick="toggleCategory('cafe')">☕ 카페</button>
             </div>
 
-            <div id="places-container"></div>
+            <div id="map"></div>
         </div>
     </div>
 
@@ -483,19 +496,21 @@
     <script>
         // 탭 전환
         function switchTab(tabName) {
-            // 모든 탭 콘텐츠 숨기기
             document.querySelectorAll('.tab-content').forEach(content => {
                 content.classList.remove('active');
             });
 
-            // 모든 탭 버튼 비활성화
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
 
-            // 선택한 탭 표시
             document.getElementById(`tab-${tabName}`).classList.add('active');
             event.currentTarget.classList.add('active');
+
+            // 장소 탭으로 전환 시 지도 크기 재조정
+            if (tabName === 'places' && map) {
+                setTimeout(() => map.invalidateSize(), 100);
+            }
         }
 
         // 예약 내역 토글
@@ -507,120 +522,130 @@
             arrow.classList.toggle('expanded');
         }
 
-        // 장소 데이터 (여기에 실제 장소 정보 입력)
+        // 장소 데이터
         const places = [
-            {
-                id: 1,
-                name: '카페 더클리프',
-                category: 'cafe',
-                address: '제주 서귀포시 안덕면 사계북로 118',
-                memo: '오션뷰 끝판왕. 일몰 시간대 추천. 주차 가능.',
-                image: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect fill="%23e0e0e0" width="400" height="300"/%3E%3Ctext x="50%25" y="50%25" font-size="20" fill="%23999" text-anchor="middle" dy=".3em"%3E카페 더클리프%3C/text%3E%3C/svg%3E'
-            },
-            {
-                id: 2,
-                name: '성산일출봉 근처 카페',
-                category: 'cafe',
-                address: '제주 서귀포시 성산읍 일출로 284-12',
-                memo: '일출봉 보고 커피 한잔. 주차 협소.',
-                image: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect fill="%23d0d0d0" width="400" height="300"/%3E%3Ctext x="50%25" y="50%25" font-size="20" fill="%23888" text-anchor="middle" dy=".3em"%3E성산 카페%3C/text%3E%3C/svg%3E'
-            },
-            {
-                id: 3,
-                name: '돈사돈',
-                category: 'restaurant',
-                address: '제주 제주시 구좌읍 해맞이해안로 1028',
-                memo: '흑돼지 맛집. 점심시간 피하기. 예약 필수.',
-                image: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect fill="%23c0c0c0" width="400" height="300"/%3E%3Ctext x="50%25" y="50%25" font-size="20" fill="%23777" text-anchor="middle" dy=".3em"%3E돈사돈%3C/text%3E%3C/svg%3E'
-            },
-            {
-                id: 4,
-                name: '해녀의 집',
-                category: 'restaurant',
-                address: '제주 제주시 구좌읍 해녀박물관길 26',
-                memo: '성게국 진짜 맛있음. 현금 준비.',
-                image: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect fill="%23b0b0b0" width="400" height="300"/%3E%3Ctext x="50%25" y="50%25" font-size="20" fill="%23666" text-anchor="middle" dy=".3em"%3E해녀의 집%3C/text%3E%3C/svg%3E'
-            },
-            {
-                id: 5,
-                name: '제주맥주 펍',
-                category: 'bar',
-                address: '제주 제주시 한림읍 한림로 56',
-                memo: '제주맥주 종류 다양. 안주도 괜찮음.',
-                image: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect fill="%23a0a0a0" width="400" height="300"/%3E%3Ctext x="50%25" y="50%25" font-size="20" fill="%23555" text-anchor="middle" dy=".3em"%3E제주맥주 펍%3C/text%3E%3C/svg%3E'
-            }
+            // 흑돼지
+            { name: '돈사돈 중문점', category: 'restaurant', lat: 33.2580503340808, lng: 126.417430836686, memo: '중문 흑돼지 맛집' },
+            { name: '숙성도 중문점', category: 'restaurant', lat: 33.26279684133946, lng: 126.39541218873346, memo: '숙성 흑돼지 전문점' },
+            { name: '큰돈가 중문점', category: 'restaurant', lat: 33.25513719083029, lng: 126.41512469546467, memo: '푸짐한 흑돼지' },
+
+            // 술집
+            { name: '인사이드지미호', category: 'bar', lat: 33.25210232977764, lng: 126.42264906244979, memo: '펍 & 칵테일' },
+            { name: '마시오름', category: 'bar', lat: 33.25524763832496, lng: 126.56009410250483, memo: '한식 술집' },
+            { name: '제리스펍', category: 'bar', lat: 33.243151520432, lng: 126.563721334744, memo: '펍 & 생맥주' },
+            { name: '찰스앤바비', category: 'bar', lat: 33.2459171590367, lng: 126.429478724077, memo: '감성 바' },
+            { name: '사우스바운더', category: 'bar', lat: 33.256409243685106, lng: 126.40257865395134, memo: '수제 맥주 양조장' },
+
+            // 카페
+            { name: '더클리프', category: 'cafe', lat: 33.2443293868576, lng: 126.414919852704, memo: '오션뷰 펍 카페' },
+            { name: '뷰스트', category: 'cafe', lat: 33.2277786011446, lng: 126.303481143838, memo: '뷰 맛집' },
+            { name: '카페오션', category: 'cafe', lat: 33.24589626270637, lng: 126.41297583477287, memo: '바다 전망 카페' },
+            { name: '바다다', category: 'cafe', lat: 33.2369068490562, lng: 126.436715016074, memo: '제주 감성 카페' }
         ];
 
-        // 카테고리 한글 매핑
-        const categoryNames = {
-            cafe: '카페',
-            restaurant: '음식점',
-            bar: '술집'
+        // 카테고리별 설정
+        const categoryColors = {
+            restaurant: '#FF6B6B',
+            bar: '#FFA500',
+            cafe: '#4CAF50'
         };
 
-        let currentFilter = 'all';
+        const categoryNames = {
+            restaurant: '흑돼지',
+            bar: '술집',
+            cafe: '카페'
+        };
 
-        // 페이지 로드시 장소 렌더링
-        function renderPlaces() {
-            const container = document.getElementById('places-container');
-            container.innerHTML = '';
+        // 지도 초기화
+        let map;
+        let markers = {};
+        let currentLocationMarker;
+        const activeCategories = { restaurant: true, bar: true, cafe: true };
 
-            const filteredPlaces = currentFilter === 'all'
-                ? places
-                : places.filter(p => p.category === currentFilter);
+        function initMap() {
+            // 히든클리프 중심으로 지도 생성
+            map = L.map('map').setView([33.25472870413066, 126.40259545696253], 13);
 
-            filteredPlaces.forEach(place => {
-                const isVisited = localStorage.getItem(`visited-${place.id}`) === 'true';
+            // OpenStreetMap 타일 추가
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap',
+                maxZoom: 18
+            }).addTo(map);
 
-                const card = document.createElement('div');
-                card.className = `place-card ${isVisited ? 'visited' : ''}`;
-                card.innerHTML = `
-                    <img src="${place.image}" alt="${place.name}" class="place-image">
-                    <div class="place-content">
-                        <div class="place-header">
-                            <div class="place-name">${place.name}</div>
-                            <div class="place-category">${categoryNames[place.category]}</div>
-                        </div>
-                        <div class="place-memo">${place.memo}</div>
-                        <div class="place-actions">
-                            <a href="https://map.naver.com/v5/search/${encodeURIComponent(place.name + ' ' + place.address)}"
-                               target="_blank"
-                               class="map-btn">
-                                네이버지도 길찾기
-                            </a>
-                            <button class="check-btn ${isVisited ? 'checked' : ''}"
-                                    onclick="toggleVisited(${place.id})">
-                                ${isVisited ? '✓' : '○'}
-                            </button>
+            // 카테고리별 레이어 그룹 생성
+            markers.restaurant = L.layerGroup().addTo(map);
+            markers.bar = L.layerGroup().addTo(map);
+            markers.cafe = L.layerGroup().addTo(map);
+
+            // 각 장소에 마커 추가
+            places.forEach(place => {
+                const marker = L.circleMarker([place.lat, place.lng], {
+                    radius: 8,
+                    fillColor: categoryColors[place.category],
+                    color: '#fff',
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                });
+
+                // 팝업 내용 생성
+                const popupContent = `
+                    <div class="popup-content">
+                        <div class="popup-title">${place.name}</div>
+                        <div class="popup-category ${place.category}">${categoryNames[place.category]}</div>
+                        <div class="popup-memo">${place.memo}</div>
+                        <div class="popup-buttons">
+                            <a href="tmap://search?name=${encodeURIComponent(place.name)}" class="popup-btn tmap">티맵</a>
+                            <a href="kakaomap://search?q=${encodeURIComponent(place.name)}" class="popup-btn kakao">카카오맵</a>
                         </div>
                     </div>
                 `;
-                container.appendChild(card);
+
+                marker.bindPopup(popupContent);
+                marker.addTo(markers[place.category]);
             });
+
+            // 현재 위치 표시
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+
+                        currentLocationMarker = L.circleMarker([lat, lng], {
+                            radius: 10,
+                            fillColor: '#007AFF',
+                            color: '#fff',
+                            weight: 3,
+                            opacity: 1,
+                            fillOpacity: 0.8
+                        }).addTo(map);
+
+                        currentLocationMarker.bindPopup('📍 현재 위치');
+                    },
+                    (error) => {
+                        console.log('위치 정보를 가져올 수 없습니다');
+                    }
+                );
+            }
         }
 
-        // 필터링
-        function filterPlaces(category) {
-            currentFilter = category;
+        // 카테고리 필터 토글
+        function toggleCategory(category) {
+            activeCategories[category] = !activeCategories[category];
 
-            // 필터 버튼 active 상태 변경
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
+            if (activeCategories[category]) {
+                map.addLayer(markers[category]);
+            } else {
+                map.removeLayer(markers[category]);
+            }
 
-            renderPlaces();
+            // 버튼 스타일 업데이트
+            event.target.classList.toggle('active');
         }
 
-        // 방문 체크
-        function toggleVisited(placeId) {
-            const isVisited = localStorage.getItem(`visited-${placeId}`) === 'true';
-            localStorage.setItem(`visited-${placeId}`, !isVisited);
-            renderPlaces();
-        }
-
-        // 초기 렌더링
-        renderPlaces();
+        // 페이지 로드 시 지도 초기화
+        window.addEventListener('load', initMap);
     </script>
 </body>
 </html>
