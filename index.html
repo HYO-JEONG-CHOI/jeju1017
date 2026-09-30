@@ -507,9 +507,13 @@
             document.getElementById(`tab-${tabName}`).classList.add('active');
             event.currentTarget.classList.add('active');
 
-            // 장소 탭으로 전환 시 지도 크기 재조정
-            if (tabName === 'places' && map) {
-                setTimeout(() => map.invalidateSize(), 100);
+            // 장소 탭으로 전환 시 지도 초기화 (한 번만)
+            if (tabName === 'places') {
+                if (!mapInitialized) {
+                    setTimeout(() => initMap(), 100);
+                } else if (map) {
+                    setTimeout(() => map.invalidateSize(), 100);
+                }
             }
         }
 
@@ -560,9 +564,12 @@
         let map;
         let markers = {};
         let currentLocationMarker;
+        let mapInitialized = false;
         const activeCategories = { restaurant: true, bar: true, cafe: true };
 
         function initMap() {
+            if (mapInitialized) return;
+            mapInitialized = true;
             // 히든클리프 중심으로 지도 생성
             map = L.map('map').setView([33.25472870413066, 126.40259545696253], 13);
 
@@ -644,8 +651,7 @@
             event.target.classList.toggle('active');
         }
 
-        // 페이지 로드 시 지도 초기화
-        window.addEventListener('load', initMap);
+        // 지도는 장소 탭을 처음 열 때 초기화됨
     </script>
 </body>
 </html>
