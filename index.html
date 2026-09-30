@@ -264,71 +264,6 @@
             color: white;
         }
 
-        .popup-content {
-            min-width: 200px;
-        }
-
-        .popup-title {
-            font-weight: bold;
-            font-size: 1.1em;
-            margin-bottom: 4px;
-        }
-
-        .popup-category {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 0.8em;
-            margin-bottom: 8px;
-        }
-
-        .popup-category.restaurant {
-            background: #FFE5E5;
-            color: #FF6B6B;
-        }
-
-        .popup-category.bar {
-            background: #FFF4E5;
-            color: #FFA500;
-        }
-
-        .popup-category.cafe {
-            background: #E8F5E9;
-            color: #4CAF50;
-        }
-
-        .popup-memo {
-            color: #666;
-            font-size: 0.9em;
-            margin-bottom: 8px;
-            line-height: 1.4;
-        }
-
-        .popup-buttons {
-            display: flex;
-            gap: 4px;
-        }
-
-        .popup-btn {
-            flex: 1;
-            padding: 6px 10px;
-            border-radius: 6px;
-            font-size: 0.85em;
-            text-decoration: none;
-            text-align: center;
-            display: block;
-        }
-
-        .popup-btn.tmap {
-            background: #0052A3;
-            color: white;
-        }
-
-        .popup-btn.kakao {
-            background: #FEE500;
-            color: #000;
-        }
-
         /* 마커 라벨 */
         .marker-label {
             background: white;
@@ -343,6 +278,167 @@
 
         .marker-label::before {
             display: none;
+        }
+
+        /* 모달 */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            font-size: 1.2em;
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        .modal-close:active {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            padding: 24px 24px 16px 24px;
+        }
+
+        .modal-place-name {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 8px;
+            padding-right: 40px;
+        }
+
+        .modal-category {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            margin-bottom: 12px;
+        }
+
+        .modal-category.restaurant {
+            background: #FFE5E5;
+            color: #FF6B6B;
+        }
+
+        .modal-category.bar {
+            background: #FFF4E5;
+            color: #FFA500;
+        }
+
+        .modal-category.cafe {
+            background: #E8F5E9;
+            color: #4CAF50;
+        }
+
+        .modal-body {
+            padding: 0 24px 24px 24px;
+        }
+
+        .modal-section {
+            margin-bottom: 20px;
+        }
+
+        .modal-section-title {
+            font-size: 0.85em;
+            color: #888;
+            margin-bottom: 6px;
+        }
+
+        .modal-section-content {
+            font-size: 1em;
+            line-height: 1.5;
+            color: #333;
+        }
+
+        .modal-link {
+            color: #007AFF;
+            text-decoration: none;
+            font-size: 0.95em;
+        }
+
+        .modal-link:active {
+            opacity: 0.7;
+        }
+
+        .modal-images {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 8px;
+        }
+
+        .modal-image {
+            flex-shrink: 0;
+            width: 200px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            background: #f0f0f0;
+        }
+
+        .modal-footer {
+            padding: 16px 24px 24px 24px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            display: block;
+        }
+
+        .modal-btn.tmap {
+            background: #0052A3;
+            color: white;
+        }
+
+        .modal-btn.kakao {
+            background: #FEE500;
+            color: #000;
+        }
+
+        .modal-btn:active {
+            opacity: 0.8;
         }
 
         /* 하단 탭 */
@@ -510,6 +606,38 @@
         </div>
     </div>
 
+    <!-- 장소 상세 모달 -->
+    <div class="modal-overlay" id="placeModal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <div class="modal-header">
+                <div class="modal-place-name" id="modalPlaceName"></div>
+                <div class="modal-category" id="modalCategory"></div>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section">
+                    <div class="modal-section-title">메모</div>
+                    <div class="modal-section-content" id="modalMemo"></div>
+                </div>
+                <div class="modal-section">
+                    <div class="modal-section-title">주소</div>
+                    <div class="modal-section-content" id="modalAddress"></div>
+                </div>
+                <div class="modal-section">
+                    <a class="modal-link" id="modalGoogleLink" target="_blank">🔍 구글 지도에서 상세보기</a>
+                </div>
+                <div class="modal-section" id="modalImagesSection" style="display:none;">
+                    <div class="modal-section-title">사진</div>
+                    <div class="modal-images" id="modalImages"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="modal-btn tmap" id="modalTmapBtn">🚗 티맵으로 열기</a>
+                <a class="modal-btn kakao" id="modalKakaoBtn">🗺️ 카카오맵으로 열기</a>
+            </div>
+        </div>
+    </div>
+
     <!-- 하단 탭 네비게이션 -->
     <div class="bottom-tabs">
         <button class="tab-btn active" onclick="switchTab('reservation')">
@@ -558,22 +686,142 @@
         // 장소 데이터
         const places = [
             // 흑돼지
-            { name: '돈사돈 중문점', category: 'restaurant', lat: 33.2580503340808, lng: 126.417430836686, memo: '중문 흑돼지 맛집' },
-            { name: '숙성도 중문점', category: 'restaurant', lat: 33.26279684133946, lng: 126.39541218873346, memo: '숙성 흑돼지 전문점' },
-            { name: '큰돈가 중문점', category: 'restaurant', lat: 33.25513719083029, lng: 126.41512469546467, memo: '푸짐한 흑돼지' },
+            {
+                name: '돈사돈 중문점',
+                category: 'restaurant',
+                lat: 33.2580503340808,
+                lng: 126.417430836686,
+                memo: '중문 흑돼지 맛집',
+                address: '제주 서귀포시 중문관광로 42',
+                googleMapUrl: 'https://maps.app.goo.gl/J4eYbr6f5d59RTu27',
+                imagePrefix: '돈사돈-중문점',
+                imageCount: 0
+            },
+            {
+                name: '숙성도 중문점',
+                category: 'restaurant',
+                lat: 33.26279684133946,
+                lng: 126.39541218873346,
+                memo: '숙성 흑돼지 전문점',
+                address: '제주 서귀포시 천제연로 111',
+                googleMapUrl: 'https://maps.app.goo.gl/VDie9ReXghJnntXQ9',
+                imagePrefix: '숙성도-중문점',
+                imageCount: 0
+            },
+            {
+                name: '큰돈가 중문점',
+                category: 'restaurant',
+                lat: 33.25513719083029,
+                lng: 126.41512469546467,
+                memo: '푸짐한 흑돼지',
+                address: '제주 서귀포시 중문관광로72번길 62',
+                googleMapUrl: 'https://maps.app.goo.gl/eVBWXwHmsNFi5i8q9',
+                imagePrefix: '큰돈가-중문점',
+                imageCount: 0
+            },
 
             // 술집
-            { name: '인사이드지미호', category: 'bar', lat: 33.25210232977764, lng: 126.42264906244979, memo: '펍 & 칵테일' },
-            { name: '마시오름', category: 'bar', lat: 33.25524763832496, lng: 126.56009410250483, memo: '한식 술집' },
-            { name: '제리스펍', category: 'bar', lat: 33.243151520432, lng: 126.563721334744, memo: '펍 & 생맥주' },
-            { name: '찰스앤바비', category: 'bar', lat: 33.2459171590367, lng: 126.429478724077, memo: '감성 바' },
-            { name: '사우스바운더', category: 'bar', lat: 33.256409243685106, lng: 126.40257865395134, memo: '수제 맥주 양조장' },
+            {
+                name: '인사이드지미호',
+                category: 'bar',
+                lat: 33.25210232977764,
+                lng: 126.42264906244979,
+                memo: '펍 & 칵테일',
+                address: '제주 서귀포시 중문관광로 154-17',
+                googleMapUrl: 'https://maps.app.goo.gl/yNx16SBA8h8gUnYBA',
+                imagePrefix: '인사이드지미호',
+                imageCount: 0
+            },
+            {
+                name: '마시오름',
+                category: 'bar',
+                lat: 33.25524763832496,
+                lng: 126.56009410250483,
+                memo: '한식 술집',
+                address: '제주 서귀포시 남원읍 태위로 536',
+                googleMapUrl: 'https://maps.app.goo.gl/zE6W8N9EbvPwZPnz8',
+                imagePrefix: '마시오름',
+                imageCount: 0
+            },
+            {
+                name: '제리스펍',
+                category: 'bar',
+                lat: 33.243151520432,
+                lng: 126.563721334744,
+                memo: '펍 & 생맥주',
+                address: '제주 서귀포시 남원읍 태위로 652',
+                googleMapUrl: 'https://maps.app.goo.gl/3iKknYUtcCTUNZfg9',
+                imagePrefix: '제리스펍',
+                imageCount: 0
+            },
+            {
+                name: '찰스앤바비',
+                category: 'bar',
+                lat: 33.2459171590367,
+                lng: 126.429478724077,
+                memo: '감성 바',
+                address: '제주 서귀포시 안덕면 화순중앙로 30',
+                googleMapUrl: 'https://maps.app.goo.gl/mqcPPeUT4RVfz94j8',
+                imagePrefix: '찰스앤바비',
+                imageCount: 0
+            },
+            {
+                name: '사우스바운더',
+                category: 'bar',
+                lat: 33.256409243685106,
+                lng: 126.40257865395134,
+                memo: '수제 맥주 양조장',
+                address: '제주 서귀포시 안덕면 화순중앙로 30-15',
+                googleMapUrl: 'https://maps.app.goo.gl/1HXWC9FhXf14MtLq7',
+                imagePrefix: '사우스바운더',
+                imageCount: 0
+            },
 
             // 카페
-            { name: '더클리프', category: 'cafe', lat: 33.2443293868576, lng: 126.414919852704, memo: '오션뷰 펍 카페' },
-            { name: '뷰스트', category: 'cafe', lat: 33.2277786011446, lng: 126.303481143838, memo: '뷰 맛집' },
-            { name: '카페오션', category: 'cafe', lat: 33.24589626270637, lng: 126.41297583477287, memo: '바다 전망 카페' },
-            { name: '바다다', category: 'cafe', lat: 33.2369068490562, lng: 126.436715016074, memo: '제주 감성 카페' }
+            {
+                name: '더클리프',
+                category: 'cafe',
+                lat: 33.2443293868576,
+                lng: 126.414919852704,
+                memo: '오션뷰 펍 카페',
+                address: '제주 서귀포시 안덕면 사계북로 118',
+                googleMapUrl: 'https://maps.app.goo.gl/y1GY1CZarhhgR8VeA',
+                imagePrefix: '더클리프',
+                imageCount: 0
+            },
+            {
+                name: '뷰스트',
+                category: 'cafe',
+                lat: 33.2277786011446,
+                lng: 126.303481143838,
+                memo: '뷰 맛집',
+                address: '제주 서귀포시 안덕면 화순해안로 86',
+                googleMapUrl: 'https://maps.app.goo.gl/puVfcHVK3REDgGTJA',
+                imagePrefix: '뷰스트',
+                imageCount: 0
+            },
+            {
+                name: '카페오션',
+                category: 'cafe',
+                lat: 33.24589626270637,
+                lng: 126.41297583477287,
+                memo: '바다 전망 카페',
+                address: '제주 서귀포시 안덕면 사계북로 85',
+                googleMapUrl: 'https://maps.app.goo.gl/QCnfaN8y9nLyVZG18',
+                imagePrefix: '카페오션',
+                imageCount: 0
+            },
+            {
+                name: '바다다',
+                category: 'cafe',
+                lat: 33.2369068490562,
+                lng: 126.436715016074,
+                memo: '제주 감성 카페',
+                address: '제주 서귀포시 안덕면 화순중앙로 30-2',
+                googleMapUrl: 'https://maps.app.goo.gl/3c5gpaiUQritGyRG6',
+                imagePrefix: '바다다',
+                imageCount: 0
+            }
         ];
 
         // 카테고리별 설정
@@ -599,6 +847,7 @@
         function initMap() {
             if (mapInitialized) return;
             mapInitialized = true;
+
             // 히든클리프 중심으로 지도 생성
             map = L.map('map').setView([33.25472870413066, 126.40259545696253], 13);
 
@@ -624,20 +873,8 @@
                     fillOpacity: 0.8
                 });
 
-                // 팝업 내용 생성
-                const popupContent = `
-                    <div class="popup-content">
-                        <div class="popup-title">${place.name}</div>
-                        <div class="popup-category ${place.category}">${categoryNames[place.category]}</div>
-                        <div class="popup-memo">${place.memo}</div>
-                        <div class="popup-buttons">
-                            <a href="tmap://search?name=${encodeURIComponent(place.name)}" class="popup-btn tmap">티맵</a>
-                            <a href="kakaomap://search?q=${encodeURIComponent(place.name)}" class="popup-btn kakao">카카오맵</a>
-                        </div>
-                    </div>
-                `;
-
-                marker.bindPopup(popupContent);
+                // 클릭 시 모달 열기
+                marker.on('click', () => openModal(place));
 
                 // 업체명을 항상 표시하는 툴팁 추가
                 marker.bindTooltip(place.name, {
@@ -687,6 +924,52 @@
 
             // 버튼 스타일 업데이트
             event.target.classList.toggle('active');
+        }
+
+        // 모달 열기
+        function openModal(place) {
+            document.getElementById('modalPlaceName').textContent = place.name;
+
+            const categoryEl = document.getElementById('modalCategory');
+            categoryEl.textContent = categoryNames[place.category];
+            categoryEl.className = 'modal-category ' + place.category;
+
+            document.getElementById('modalMemo').textContent = place.memo;
+            document.getElementById('modalAddress').textContent = place.address;
+
+            const googleLink = document.getElementById('modalGoogleLink');
+            googleLink.href = place.googleMapUrl;
+
+            // 이미지가 있으면 표시
+            const imagesSection = document.getElementById('modalImagesSection');
+            const imagesContainer = document.getElementById('modalImages');
+            if (place.imageCount > 0) {
+                imagesContainer.innerHTML = '';
+                for (let i = 1; i <= place.imageCount; i++) {
+                    const img = document.createElement('img');
+                    img.src = `images/${place.imagePrefix}-${i}.jpg`;
+                    img.className = 'modal-image';
+                    img.alt = `${place.name} 사진 ${i}`;
+                    imagesContainer.appendChild(img);
+                }
+                imagesSection.style.display = 'block';
+            } else {
+                imagesSection.style.display = 'none';
+            }
+
+            // 지도 앱 버튼
+            document.getElementById('modalTmapBtn').href = `tmap://search?name=${encodeURIComponent(place.name)}`;
+            document.getElementById('modalKakaoBtn').href = `kakaomap://search?q=${encodeURIComponent(place.name)}`;
+
+            // 모달 표시
+            document.getElementById('placeModal').classList.add('active');
+        }
+
+        // 모달 닫기
+        function closeModal(event) {
+            if (!event || event.target.id === 'placeModal') {
+                document.getElementById('placeModal').classList.remove('active');
+            }
         }
 
         // 지도는 장소 탭을 처음 열 때 초기화됨
