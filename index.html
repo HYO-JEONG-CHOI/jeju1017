@@ -150,6 +150,44 @@
             background: #e0e0e0;
         }
 
+        .map-app-btns {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .map-app-btn {
+            flex: 1;
+            padding: 10px 12px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.9em;
+            text-decoration: none;
+            color: #333;
+            text-align: center;
+            display: block;
+        }
+
+        .map-app-btn:active {
+            background: #f0f0f0;
+        }
+
+        .map-app-btn.tmap {
+            border-color: #0052A3;
+            color: #0052A3;
+        }
+
+        .map-app-btn.kakao {
+            border-color: #FEE500;
+            background: #FEE500;
+            color: #000;
+        }
+
+        .map-app-btn.kakao:active {
+            background: #FDDC00;
+        }
+
         /* 필터 버튼 */
         .filter-container {
             display: flex;
@@ -359,12 +397,18 @@
                         </div>
                         <div class="detail-item">
                             <div class="detail-label">주소</div>
-                            <div class="detail-value">서귀포시 예래해안로 542(중문)<br>히든클리프 호텔 & 네이처</div>
+                            <div class="detail-value">
+                                서귀포시 예래해안로 542(중문)<br>히든클리프 호텔 & 네이처
+                                <div class="map-app-btns">
+                                    <a href="tmap://search?name=히든클리프 호텔 앤 네이처" class="map-app-btn tmap">🚗 티맵 안내 시작</a>
+                                    <a href="kakaomap://search?q=히든클리프 호텔 앤 네이처" class="map-app-btn kakao">🗺️ 카카오맵 안내 시작</a>
+                                </div>
+                            </div>
                         </div>
                         <div class="detail-item">
                             <div class="detail-label">예약 확정서</div>
                             <div class="detail-value">
-                                <a href="#" class="file-btn" onclick="alert('예약 확정서 파일을 추가해주세요'); return false;">📄 확정서 보기</a>
+                                <a href="./숙소 예약확정서.pdf" target="_blank" class="file-btn">📄 확정서 보기</a>
                             </div>
                         </div>
                     </div>
