@@ -240,8 +240,7 @@
         }
 
         .map-filter-btn.restaurant.active {
-            background: #FF6B6B;
-            color: white;
+            border-width: 3px;
         }
 
         .map-filter-btn.bar {
@@ -250,8 +249,7 @@
         }
 
         .map-filter-btn.bar.active {
-            background: #FFA500;
-            color: white;
+            border-width: 3px;
         }
 
         .map-filter-btn.cafe {
@@ -260,8 +258,7 @@
         }
 
         .map-filter-btn.cafe.active {
-            background: #4CAF50;
-            color: white;
+            border-width: 3px;
         }
 
         /* 마커 라벨 */
@@ -628,10 +625,6 @@
                     <div class="modal-section-content" id="modalHours"></div>
                 </div>
                 <div class="modal-section">
-                    <div class="modal-section-title">휴무일</div>
-                    <div class="modal-section-content" id="modalClosedDays"></div>
-                </div>
-                <div class="modal-section">
                     <a class="modal-link" id="modalGoogleLink" target="_blank">🔍 구글 지도에서 상세보기</a>
                 </div>
                 <div class="modal-section" id="modalImagesSection" style="display:none;">
@@ -977,8 +970,13 @@
 
             document.getElementById('modalMemo').textContent = place.memo;
             document.getElementById('modalAddress').textContent = place.address;
-            document.getElementById('modalHours').textContent = place.hours;
-            document.getElementById('modalClosedDays').textContent = place.closedDays;
+
+            // 영업시간과 휴무일 합치기
+            let hoursText = place.hours;
+            if (place.closedDays && place.closedDays !== '연중무휴') {
+                hoursText += ` (${place.closedDays} 휴무)`;
+            }
+            document.getElementById('modalHours').textContent = hoursText;
 
             const googleLink = document.getElementById('modalGoogleLink');
             googleLink.href = place.googleMapUrl;
