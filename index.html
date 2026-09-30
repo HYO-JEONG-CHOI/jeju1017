@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제주 여행 허브 🌴</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .card-header h2 {
+            font-size: 1.3em;
+            margin-left: 10px;
+            color: #667eea;
+        }
+
+        .icon {
+            font-size: 1.5em;
+        }
+
+        .item {
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .item:last-child {
+            margin-bottom: 0;
+        }
+
+        .item-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .item-detail {
+            color: #666;
+            font-size: 0.95em;
+            margin-top: 5px;
+        }
+
+        .item-link {
+            display: inline-block;
+            margin-top: 8px;
+            color: #667eea;
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+
+        .item-link:hover {
+            text-decoration: underline;
+        }
+
+        .rating {
+            color: #ffa500;
+            margin-top: 5px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            margin-right: 5px;
+            margin-top: 5px;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            cursor: pointer;
+        }
+
+        .checklist-item label {
+            flex: 1;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .checklist-item input[type="checkbox"]:checked + label {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        .add-btn {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .add-btn:active {
+            background: #5568d3;
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .card {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌴 제주 여행 허브</h1>
+            <p>나만의 여행 가이드</p>
+        </div>
+
+        <!-- 예약 내역 -->
+        <div class="card">
+            <div class="card-header">
+                <span class="icon">📅</span>
+                <h2>예약 내역</h2>
+            </div>
+            <div class="item">
+                <div class="item-title">숙소: [숙소명]</div>
+                <div class="item-detail">📍 체크인: 2026년 10월 17일 15:00</div>
+                <div class="item-detail">📍 체크아웃: 2026년 10월 20일 11:00</div>
+                <div class="item-detail">📞 연락처: 064-XXX-XXXX</div>
+            </div>
+            <div class="item">
+                <div class="item-title">렌터카: [차량명]</div>
+                <div class="item-detail">🚗 픽업: 10월 17일 16:00 - 제주공항</div>
+                <div class="item-detail">🚗 반납: 10월 20일 10:00 - 제주공항</div>
+            </div>
+        </div>
+
+        <!-- 음식점 -->
+        <div class="card">
+            <div class="card-header">
+                <span class="icon">🍽️</span>
+                <h2>맛집 리스트</h2>
+            </div>
+            <div class="item">
+                <div class="item-title">흑돼지 맛집</div>
+                <div class="item-detail">📍 제주시 중앙로</div>
+                <div class="rating">⭐⭐⭐⭐⭐</div>
+                <div class="item-detail">💰 1인 15,000원</div>
+                <span class="tag">흑돼지</span>
+                <span class="tag">고기</span>
+            </div>
+            <div class="item">
+                <div class="item-title">해물뚝배기</div>
+                <div class="item-detail">📍 서귀포시 해안로</div>
+                <div class="rating">⭐⭐⭐⭐</div>
+                <div class="item-detail">💰 1인 12,000원</div>
+                <span class="tag">해산물</span>
+                <span class="tag">뚝배기</span>
+            </div>
+            <div class="item">
+                <div class="item-title">카페 오션뷰</div>
+                <div class="item-detail">📍 애월읍 해안도로</div>
+                <div class="rating">⭐⭐⭐⭐⭐</div>
+                <div class="item-detail">💰 아메리카노 5,000원</div>
+                <span class="tag">카페</span>
+                <span class="tag">오션뷰</span>
+            </div>
+        </div>
+
+        <!-- 관광지 -->
+        <div class="card">
+            <div class="card-header">
+                <span class="icon">📍</span>
+                <h2>방문 장소</h2>
+            </div>
+            <div class="item">
+                <div class="item-title">성산일출봉</div>
+                <div class="item-detail">📍 서귀포시 성산읍</div>
+                <div class="item-detail">🕐 운영시간: 07:00 - 19:00</div>
+                <div class="item-detail">💰 입장료: 5,000원</div>
+            </div>
+            <div class="item">
+                <div class="item-title">한라산 등반</div>
+                <div class="item-detail">📍 제주시 1100로</div>
+                <div class="item-detail">🕐 입산시간: 05:00 - 12:00</div>
+                <div class="item-detail">💰 무료</div>
+            </div>
+            <div class="item">
+                <div class="item-title">우도</div>
+                <div class="item-detail">📍 제주시 우도면</div>
+                <div class="item-detail">⛴️ 배편: 성산포항 - 우도 15분</div>
+            </div>
+        </div>
+
+        <!-- 체크리스트 -->
+        <div class="card">
+            <div class="card-header">
+                <span class="icon">✅</span>
+                <h2>여행 체크리스트</h2>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="check1">
+                <label for="check1">항공권/배편 확인</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="check2">
+                <label for="check2">숙소 예약 확인</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="check3">
+                <label for="check3">렌터카 예약 확인</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="check4">
+                <label for="check4">여행자 보험 가입</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="check5">
+                <label for="check5">선크림, 모자 챙기기</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="check6">
+                <label for="check6">카메라, 보조배터리</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="check7">
+                <label for="check7">편한 운동화</label>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 체크리스트 상태 저장
+        document.querySelectorAll('.checklist-item input[type="checkbox"]').forEach(checkbox => {
+            // 페이지 로드시 저장된 상태 불러오기
+            const saved = localStorage.getItem(checkbox.id);
+            if (saved === 'true') {
+                checkbox.checked = true;
+            }
+
+            // 체크박스 변경시 저장
+            checkbox.addEventListener('change', function() {
+                localStorage.setItem(this.id, this.checked);
+            });
+        });
+    </script>
+</body>
+</html>
