@@ -215,6 +215,19 @@
             cursor: pointer;
             white-space: nowrap;
             transition: all 0.2s;
+            position: relative;
+            padding-left: 32px;
+        }
+
+        .map-filter-btn::before {
+            content: '☐';
+            position: absolute;
+            left: 10px;
+            font-size: 1.1em;
+        }
+
+        .map-filter-btn.active::before {
+            content: '☑';
         }
 
         .map-filter-btn.active {
@@ -314,6 +327,22 @@
         .popup-btn.kakao {
             background: #FEE500;
             color: #000;
+        }
+
+        /* 마커 라벨 */
+        .marker-label {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 0.85em;
+            font-weight: 500;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            white-space: nowrap;
+        }
+
+        .marker-label::before {
+            display: none;
         }
 
         /* 하단 탭 */
@@ -609,6 +638,15 @@
                 `;
 
                 marker.bindPopup(popupContent);
+
+                // 업체명을 항상 표시하는 툴팁 추가
+                marker.bindTooltip(place.name, {
+                    permanent: true,
+                    direction: 'right',
+                    className: 'marker-label',
+                    offset: [10, 0]
+                });
+
                 marker.addTo(markers[place.category]);
             });
 
