@@ -908,13 +908,22 @@
                 // 클릭 시 모달 열기
                 marker.on('click', () => openModal(place));
 
-                // 업체명을 항상 표시하는 툴팁 추가
+                // 업체명을 항상 표시하는 툴팁 추가 (클릭 가능)
                 marker.bindTooltip(place.name, {
                     permanent: true,
                     direction: 'right',
-                    className: 'marker-label',
+                    className: 'marker-label marker-label-' + place.name.replace(/\s+/g, '-'),
                     offset: [10, 0]
                 });
+
+                // 툴팁 클릭 이벤트 추가
+                setTimeout(() => {
+                    const tooltipEls = document.querySelectorAll('.marker-label-' + place.name.replace(/\s+/g, '-'));
+                    tooltipEls.forEach(el => {
+                        el.style.cursor = 'pointer';
+                        el.onclick = () => openModal(place);
+                    });
+                }, 100);
 
                 marker.addTo(markers[place.category]);
             });
@@ -981,7 +990,7 @@
                 imagesContainer.innerHTML = '';
                 for (let i = 1; i <= place.imageCount; i++) {
                     const img = document.createElement('img');
-                    img.src = `images/\${place.imagePrefix}\${i}.png`;
+                    img.src = `images/${place.imagePrefix}${i}.png`;
                     img.className = 'modal-image';
                     img.alt = `${place.name} 사진 ${i}`;
                     imagesContainer.appendChild(img);
