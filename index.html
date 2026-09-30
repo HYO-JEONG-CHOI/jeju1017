@@ -438,6 +438,51 @@
             opacity: 0.8;
         }
 
+        /* 이미지 확대 오버레이 */
+        .image-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .image-overlay.active {
+            display: flex;
+        }
+
+        .image-overlay img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .image-overlay-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5em;
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        .image-overlay-close:active {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
         /* 하단 탭 */
         .bottom-tabs {
             position: fixed;
@@ -637,6 +682,12 @@
                 <a class="modal-btn kakao" id="modalKakaoBtn">🗺️ 카카오맵으로 열기</a>
             </div>
         </div>
+    </div>
+
+    <!-- 이미지 확대 오버레이 -->
+    <div class="image-overlay" id="imageOverlay" onclick="closeImageOverlay()">
+        <button class="image-overlay-close" onclick="closeImageOverlay()">✕</button>
+        <img id="overlayImage" onclick="event.stopPropagation()" alt="확대 이미지">
     </div>
 
     <!-- 하단 탭 네비게이션 -->
@@ -991,6 +1042,8 @@
                     img.src = `images/${place.imagePrefix}${i}.png`;
                     img.className = 'modal-image';
                     img.alt = `${place.name} 사진 ${i}`;
+                    img.style.cursor = 'pointer';
+                    img.onclick = () => openImageOverlay(img.src);
                     imagesContainer.appendChild(img);
                 }
                 imagesSection.style.display = 'block';
@@ -1011,6 +1064,17 @@
             if (!event || event.target.id === 'placeModal') {
                 document.getElementById('placeModal').classList.remove('active');
             }
+        }
+
+        // 이미지 확대 오버레이 열기
+        function openImageOverlay(imageSrc) {
+            document.getElementById('overlayImage').src = imageSrc;
+            document.getElementById('imageOverlay').classList.add('active');
+        }
+
+        // 이미지 확대 오버레이 닫기
+        function closeImageOverlay() {
+            document.getElementById('imageOverlay').classList.remove('active');
         }
 
         // 지도는 장소 탭을 처음 열 때 초기화됨
