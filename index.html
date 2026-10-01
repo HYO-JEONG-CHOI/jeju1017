@@ -262,6 +262,12 @@
             color: #4CAF50;
         }
 
+        .map-filter-btn.rawfish.active {
+            background: #E3F2FD;
+            border-color: #2196F3;
+            color: #2196F3;
+        }
+
         /* 마커 라벨 */
         .marker-label {
             background: white;
@@ -641,6 +647,7 @@
 
             <div class="map-filter-container">
                 <button class="map-filter-btn restaurant" onclick="toggleCategory('restaurant')">🍖 흑돼지</button>
+                <button class="map-filter-btn rawfish" onclick="toggleCategory('rawfish')">🐟 회</button>
                 <button class="map-filter-btn bar" onclick="toggleCategory('bar')">🍺 술집</button>
                 <button class="map-filter-btn cafe" onclick="toggleCategory('cafe')">☕ 카페</button>
             </div>
@@ -886,11 +893,11 @@
                 imagePrefix: '카페오션',
                 imageCount: 1
             },
-            { 
-                name: '바다다', 
-                category: 'cafe', 
-                lat: 33.2369068490562, 
-                lng: 126.436715016074, 
+            {
+                name: '바다다',
+                category: 'cafe',
+                lat: 33.2369068490562,
+                lng: 126.436715016074,
                 memo: '제주 감성 카페',
                 address: '제주 서귀포시 안덕면 화순중앙로 30-2',
                 hours: '11:00~18:00',
@@ -898,18 +905,35 @@
                 googleMapUrl: 'https://maps.app.goo.gl/3c5gpaiUQritGyRG6',
                 imagePrefix: '바다다',
                 imageCount: 2
+            },
+
+            // 회
+            {
+                name: '여기고씨네',
+                category: 'rawfish',
+                lat: 33.256,
+                lng: 126.417,
+                memo: '고등어, 딱새우, 갈치 등 해산물',
+                address: '제주특별자치도 서귀포시 중문동 2017 더프라임시티 가동 2층 201호',
+                hours: '16:00~02:00',
+                closedDays: '연중무휴',
+                googleMapUrl: 'https://maps.app.goo.gl/it6QrgfdfcCE7ckTA',
+                imagePrefix: '여기고씨네',
+                imageCount: 0
             }
         ];
 
         // 카테고리별 설정
         const categoryColors = {
             restaurant: '#FF6B6B',
+            rawfish: '#2196F3',
             bar: '#FFA500',
             cafe: '#4CAF50'
         };
 
         const categoryNames = {
             restaurant: '흑돼지',
+            rawfish: '회',
             bar: '술집',
             cafe: '카페'
         };
@@ -919,7 +943,7 @@
         let markers = {};
         let currentLocationMarker;
         let mapInitialized = false;
-        const activeCategories = { restaurant: true, bar: true, cafe: true };
+        const activeCategories = { restaurant: true, rawfish: true, bar: true, cafe: true };
 
         function initMap() {
             if (mapInitialized) return;
@@ -936,6 +960,7 @@
 
             // 카테고리별 레이어 그룹 생성
             markers.restaurant = L.layerGroup().addTo(map);
+            markers.rawfish = L.layerGroup().addTo(map);
             markers.bar = L.layerGroup().addTo(map);
             markers.cafe = L.layerGroup().addTo(map);
 
@@ -1017,6 +1042,8 @@
                 activeButtons.forEach(btn => {
                     if (btn.classList.contains('restaurant')) {
                         map.addLayer(markers.restaurant);
+                    } else if (btn.classList.contains('rawfish')) {
+                        map.addLayer(markers.rawfish);
                     } else if (btn.classList.contains('bar')) {
                         map.addLayer(markers.bar);
                     } else if (btn.classList.contains('cafe')) {
