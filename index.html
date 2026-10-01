@@ -207,8 +207,8 @@
         }
 
         .map-filter-btn {
-            padding: 8px 16px;
-            border: 2px solid #ddd;
+            padding: 10px 20px;
+            border: 1.5px solid #ddd;
             background: white;
             border-radius: 20px;
             font-size: 0.9em;
@@ -216,49 +216,50 @@
             white-space: nowrap;
             transition: all 0.2s;
             position: relative;
-            padding-left: 32px;
+            padding-left: 40px;
+            color: #666;
         }
 
         .map-filter-btn::before {
-            content: '☐';
+            content: '';
             position: absolute;
-            left: 10px;
-            font-size: 1.1em;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            border: 1.5px solid #ddd;
+            border-radius: 4px;
+            background: white;
         }
 
         .map-filter-btn.active::before {
-            content: '☑';
-        }
-
-        .map-filter-btn.active {
+            content: '✓';
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9em;
             font-weight: bold;
+            border-color: currentColor;
+            color: inherit;
         }
 
-        .map-filter-btn.restaurant {
+        .map-filter-btn.restaurant.active {
+            background: #FFE5E5;
             border-color: #FF6B6B;
             color: #FF6B6B;
         }
 
-        .map-filter-btn.restaurant.active {
-            border-width: 3px;
-        }
-
-        .map-filter-btn.bar {
+        .map-filter-btn.bar.active {
+            background: #FFF4E5;
             border-color: #FFA500;
             color: #FFA500;
         }
 
-        .map-filter-btn.bar.active {
-            border-width: 3px;
-        }
-
-        .map-filter-btn.cafe {
+        .map-filter-btn.cafe.active {
+            background: #E8F5E9;
             border-color: #4CAF50;
             color: #4CAF50;
-        }
-
-        .map-filter-btn.cafe.active {
-            border-width: 3px;
         }
 
         /* 마커 라벨 */
@@ -639,9 +640,9 @@
             <div class="section-title">📍 장소 지도</div>
 
             <div class="map-filter-container">
-                <button class="map-filter-btn restaurant active" onclick="toggleCategory('restaurant')">🍖 흑돼지</button>
-                <button class="map-filter-btn bar active" onclick="toggleCategory('bar')">🍺 술집</button>
-                <button class="map-filter-btn cafe active" onclick="toggleCategory('cafe')">☕ 카페</button>
+                <button class="map-filter-btn restaurant" onclick="toggleCategory('restaurant')">🍖 흑돼지</button>
+                <button class="map-filter-btn bar" onclick="toggleCategory('bar')">🍺 술집</button>
+                <button class="map-filter-btn cafe" onclick="toggleCategory('cafe')">☕ 카페</button>
             </div>
 
             <div id="map"></div>
@@ -999,16 +1000,35 @@
 
         // 카테고리 필터 토글
         function toggleCategory(category) {
-            activeCategories[category] = !activeCategories[category];
-
-            if (activeCategories[category]) {
-                map.addLayer(markers[category]);
-            } else {
-                map.removeLayer(markers[category]);
-            }
-
-            // 버튼 스타일 업데이트
+            // 버튼 토글
             event.target.classList.toggle('active');
+
+            // 활성화된 카테고리 확인
+            const activeButtons = document.querySelectorAll('.map-filter-btn.active');
+            const hasActiveFilters = activeButtons.length > 0;
+
+            // 모든 마커 제거
+            Object.keys(markers).forEach(cat => {
+                map.removeLayer(markers[cat]);
+            });
+
+            if (hasActiveFilters) {
+                // 활성화된 카테고리만 표시
+                activeButtons.forEach(btn => {
+                    if (btn.classList.contains('restaurant')) {
+                        map.addLayer(markers.restaurant);
+                    } else if (btn.classList.contains('bar')) {
+                        map.addLayer(markers.bar);
+                    } else if (btn.classList.contains('cafe')) {
+                        map.addLayer(markers.cafe);
+                    }
+                });
+            } else {
+                // 아무것도 선택 안 되어 있으면 모두 표시
+                Object.keys(markers).forEach(cat => {
+                    map.addLayer(markers[cat]);
+                });
+            }
         }
 
         // 모달 열기
