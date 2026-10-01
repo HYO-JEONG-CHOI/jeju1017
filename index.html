@@ -278,6 +278,8 @@
             font-weight: 500;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             white-space: nowrap;
+            cursor: pointer;
+            pointer-events: auto !important;
         }
 
         .marker-label::before {
@@ -983,17 +985,19 @@
                     permanent: true,
                     direction: 'right',
                     className: 'marker-label marker-label-' + place.name.replace(/\s+/g, '-'),
-                    offset: [10, 0]
+                    offset: [3, 0]
                 });
 
                 // 툴팁 클릭 이벤트 추가
                 setTimeout(() => {
                     const tooltipEls = document.querySelectorAll('.marker-label-' + place.name.replace(/\s+/g, '-'));
                     tooltipEls.forEach(el => {
-                        el.style.cursor = 'pointer';
-                        el.onclick = () => openModal(place);
+                        el.onclick = (e) => {
+                            e.stopPropagation();
+                            openModal(place);
+                        };
                     });
-                }, 100);
+                }, 200);
 
                 marker.addTo(markers[place.category]);
             });
