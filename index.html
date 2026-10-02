@@ -275,6 +275,12 @@
             color: #2196F3;
         }
 
+        .map-filter-btn.mart.active {
+            background: #F3E5F5;
+            border-color: #9C27B0;
+            color: #9C27B0;
+        }
+
         /* 마커 라벨 */
         .marker-label {
             background: white;
@@ -659,6 +665,7 @@
                 <button class="map-filter-btn rawfish" onclick="toggleCategory('rawfish')">🐟 회</button>
                 <button class="map-filter-btn bar" onclick="toggleCategory('bar')">🍺 술집</button>
                 <button class="map-filter-btn cafe" onclick="toggleCategory('cafe')">☕ 카페</button>
+                <button class="map-filter-btn mart" onclick="toggleCategory('mart')">🏪 마트</button>
             </div>
 
             <div id="map"></div>
@@ -942,6 +949,21 @@
                 googleMapUrl: 'https://maps.app.goo.gl/FVgGiJMktYKvmwFq9',
                 imagePrefix: '중문회어시장',
                 imageCount: 0
+            },
+
+            // 마트/편의점
+            {
+                name: '해성 마트',
+                category: 'mart',
+                lat: 33.2543312619968,
+                lng: 126.419846970015,
+                memo: '',
+                address: '제주특별자치도 서귀포시 중문동 1489-1',
+                hours: '07:00~23:00',
+                closedDays: '연중무휴',
+                googleMapUrl: 'https://maps.app.goo.gl/nJEGuT1JW3HUf5xL6',
+                imagePrefix: '해성 마트',
+                imageCount: 0
             }
         ];
 
@@ -950,14 +972,16 @@
             restaurant: '#FF6B6B',
             rawfish: '#2196F3',
             bar: '#FFA500',
-            cafe: '#4CAF50'
+            cafe: '#4CAF50',
+            mart: '#9C27B0'
         };
 
         const categoryNames = {
             restaurant: '흑돼지',
             rawfish: '회',
             bar: '술집',
-            cafe: '카페'
+            cafe: '카페',
+            mart: '마트'
         };
 
         // 지도 초기화
@@ -965,7 +989,7 @@
         let markers = {};
         let currentLocationMarker;
         let mapInitialized = false;
-        const activeCategories = { restaurant: true, rawfish: true, bar: true, cafe: true };
+        const activeCategories = { restaurant: true, rawfish: true, bar: true, cafe: true, mart: true };
 
         function initMap() {
             if (mapInitialized) return;
@@ -985,6 +1009,7 @@
             markers.rawfish = L.layerGroup().addTo(map);
             markers.bar = L.layerGroup().addTo(map);
             markers.cafe = L.layerGroup().addTo(map);
+            markers.mart = L.layerGroup().addTo(map);
 
             // 각 장소에 마커 추가
             places.forEach(place => {
@@ -1072,6 +1097,8 @@
                         map.addLayer(markers.bar);
                     } else if (btn.classList.contains('cafe')) {
                         map.addLayer(markers.cafe);
+                    } else if (btn.classList.contains('mart')) {
+                        map.addLayer(markers.mart);
                     }
                 });
             } else {
