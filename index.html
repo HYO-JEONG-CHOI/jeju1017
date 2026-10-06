@@ -283,6 +283,12 @@
             color: #9C27B0;
         }
 
+        .map-filter-btn.food.active {
+            background: #E0F7FA;
+            border-color: #00BCD4;
+            color: #00BCD4;
+        }
+
         /* 마커 라벨 */
         .marker-label {
             background: white;
@@ -668,6 +674,7 @@
                 <button class="map-filter-btn bar" onclick="toggleCategory('bar')">🍺 술집</button>
                 <button class="map-filter-btn cafe" onclick="toggleCategory('cafe')">☕ 카페</button>
                 <button class="map-filter-btn mart" onclick="toggleCategory('mart')">🏪 마트</button>
+                <button class="map-filter-btn food" onclick="toggleCategory('food')">🍜 음식점</button>
             </div>
 
             <div id="map"></div>
@@ -966,6 +973,21 @@
                 googleMapUrl: 'https://maps.app.goo.gl/nJEGuT1JW3HUf5xL6',
                 imagePrefix: '해성 마트',
                 imageCount: 0
+            },
+
+            // 음식점
+            {
+                name: '포도호텔',
+                category: 'food',
+                lat: 33.31744755784759,
+                lng: 126.38754477031586,
+                memo: '우동 맛집',
+                address: '',
+                hours: '06:30~21:50 (브레이크타임 10:30~12:00, 15:30~18:00)',
+                closedDays: '연중무휴',
+                googleMapUrl: 'https://maps.app.goo.gl/jyBsJHU4m4VXoxF3A',
+                imagePrefix: '포도호텔',
+                imageCount: 0
             }
         ];
 
@@ -975,7 +997,8 @@
             rawfish: '#2196F3',
             bar: '#FFA500',
             cafe: '#4CAF50',
-            mart: '#9C27B0'
+            mart: '#9C27B0',
+            food: '#00BCD4'
         };
 
         const categoryNames = {
@@ -983,7 +1006,8 @@
             rawfish: '회',
             bar: '술집',
             cafe: '카페',
-            mart: '마트'
+            mart: '마트',
+            food: '음식점'
         };
 
         // 지도 초기화
@@ -991,7 +1015,7 @@
         let markers = {};
         let currentLocationMarker;
         let mapInitialized = false;
-        const activeCategories = { restaurant: true, rawfish: true, bar: true, cafe: true, mart: true };
+        const activeCategories = { restaurant: true, rawfish: true, bar: true, cafe: true, mart: true, food: true };
 
         function initMap() {
             if (mapInitialized) return;
@@ -1012,6 +1036,7 @@
             markers.bar = L.layerGroup().addTo(map);
             markers.cafe = L.layerGroup().addTo(map);
             markers.mart = L.layerGroup().addTo(map);
+            markers.food = L.layerGroup().addTo(map);
 
             // 각 장소에 마커 추가
             places.forEach(place => {
@@ -1101,6 +1126,8 @@
                         map.addLayer(markers.cafe);
                     } else if (btn.classList.contains('mart')) {
                         map.addLayer(markers.mart);
+                    } else if (btn.classList.contains('food')) {
+                        map.addLayer(markers.food);
                     }
                 });
             } else {
