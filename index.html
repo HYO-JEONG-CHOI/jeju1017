@@ -513,6 +513,27 @@
             background: rgba(255, 255, 255, 0.3);
         }
 
+        /* 사진 갤러리 */
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            padding-bottom: 20px;
+        }
+
+        .photo-gallery img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .photo-gallery img:active {
+            transform: scale(0.95);
+        }
+
         /* 하단 탭 */
         .bottom-tabs {
             position: fixed;
@@ -685,9 +706,7 @@
     <div id="tab-photo" class="tab-content">
         <div class="content">
             <h2 class="section-title">📷 사진 이렇게 찍어주세요</h2>
-            <div style="text-align: center; padding: 40px 0; color: #999;">
-                준비 중입니다
-            </div>
+            <div class="photo-gallery" id="photoGallery"></div>
         </div>
     </div>
 
@@ -750,6 +769,24 @@
     </div>
 
     <script>
+        // 사진 갤러리 초기화
+        let photoGalleryLoaded = false;
+        const photoCount = 12;
+
+        function loadPhotoGallery() {
+            if (photoGalleryLoaded) return;
+            photoGalleryLoaded = true;
+
+            const gallery = document.getElementById('photoGallery');
+            for (let i = 1; i <= photoCount; i++) {
+                const img = document.createElement('img');
+                img.src = `images/tips/tips${i}.PNG`;
+                img.alt = `사진 팁 ${i}`;
+                img.onclick = () => openImageOverlay(img.src);
+                gallery.appendChild(img);
+            }
+        }
+
         // 탭 전환
         function switchTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(content => {
@@ -770,6 +807,11 @@
                 } else if (map) {
                     setTimeout(() => map.invalidateSize(), 100);
                 }
+            }
+
+            // 사진 탭으로 전환 시 갤러리 로드 (한 번만)
+            if (tabName === 'photo') {
+                loadPhotoGallery();
             }
         }
 
